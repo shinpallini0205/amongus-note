@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  web:
+    image: pallini/streamlit
+    container_name: streamlit
+    build: 
+      context: ./python
+    restart: always
+    ports:
+      - "8501:8501"
+    volumes:
+      - type: bind
+        source: ./python/work
+        target: /tmp/work
+    command: ["streamlit", "run", "app.py"]
