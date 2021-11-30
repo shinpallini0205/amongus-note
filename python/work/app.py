@@ -13,7 +13,7 @@ st.title('Among us Note')
 st.header('Player list')
 players = st.text_area(
     "Please write player name.",
-     placeholder="Player_name1\nPlayer_name2\nPlayer_name3\n..."
+    placeholder="Player_name1\nPlayer_name2\nPlayer_name3\n..."
 )
 player_list = players.split()
 st.write('Player list')
@@ -50,4 +50,6 @@ st.write(st.session_state['alive'])
 for killed_player in st.session_state['dead']:
     with st.expander(killed_player):
         for alive_player in st.session_state['alive']:
-            st.slider(f"Possibility that {alive_player} killed {killed_player}")
+            st.select_slider(
+                f"Possibility that {alive_player} killed {killed_player}",
+                options=['Innocent', 'A little innocent', 'Neither', 'A little suspicious','Suspicious'])
