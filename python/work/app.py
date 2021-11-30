@@ -32,8 +32,7 @@ killed = st.selectbox("Select killed player...", options=player_list)
 append_flag = st.button("Click me")
 if append_flag:
     st.session_state['dead'].append(killed)
-    # st.session_state['status'] = {k: v for k, v in zip(player_list, [1]*len(player_list))}
-    # st.write(st.session_state['status'])
+
 st.write(st.session_state['dead'])
 
 """Create alive player list
@@ -45,7 +44,7 @@ st.write(st.session_state['alive'])
 """Expander test
 """
 
-# for k, v in st.session_state['status'].items():
-#     with st.expander(k):
-#         st.write(f'Player name: {k}, Player_status: {v}')
-#         st.slider(f'{k}')
+for killed_player in st.session_state['dead']:
+    with st.expander(killed_player):
+        for alive_player in st.session_state['alive']:
+            st.slider(f"Possibility that {alive_player} killed {killed_player}")
