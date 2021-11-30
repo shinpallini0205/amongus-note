@@ -36,6 +36,12 @@ if append_flag:
     # st.write(st.session_state['status'])
 st.write(st.session_state['dead'])
 
+"""Create alive player list
+"""
+
+st.session_state['alive'] = [player for player in player_list if not player in st.session_state['dead']]
+st.write(st.session_state['alive'])
+
 """Expander test
 """
 
