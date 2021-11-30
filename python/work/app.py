@@ -1,7 +1,10 @@
 import streamlit as st
 
-if 'status' not in st.session_state:
-    st.session_state['status'] = {}
+if 'dead' not in st.session_state:
+    st.session_state['dead'] = []
+
+if 'alive' not in st.session_state:
+    st.session_state['alive'] = []
 
 st.title('Among us Note')
 
@@ -13,14 +16,30 @@ player_list = players.split()
 st.write('Player list')
 st.write(player_list)
 
-"""Create player status dictionaly.
+
+"""Clear dead player list
 """
-st.session_state['status'] = {k: v for k, v in zip(player_list, [1]*len(player_list))}
-st.write(st.session_state['status'])
+clear_flag = st.button("Clear")
+if clear_flag:
+    st.session_state['dead'] = []
+    st.session_state['alive'] = []
+
+
+"""Create dead player list
+"""
+
+killed = st.selectbox("Select killed player...", options=player_list)
+append_flag = st.button("Click me")
+if append_flag:
+    st.session_state['dead'].append(killed)
+    # st.session_state['status'] = {k: v for k, v in zip(player_list, [1]*len(player_list))}
+    # st.write(st.session_state['status'])
+st.write(st.session_state['dead'])
 
 """Expander test
 """
-for k, v in st.session_state['status'].items():
-    with st.expander(k):
-        st.write(f'Player name: {k}, Player_status: {v}')
-        st.slider(f'{k}')
+
+# for k, v in st.session_state['status'].items():
+#     with st.expander(k):
+#         st.write(f'Player name: {k}, Player_status: {v}')
+#         st.slider(f'{k}')
