@@ -8,6 +8,8 @@ if 'dead' not in st.session_state:
 if 'ejected' not in st.session_state:
     st.session_state['ejected'] = []
 
+
+st.caption("Created by shinpallini0205")
 st.title('Among usノート')
 
 # Create player list from text_area.
@@ -15,7 +17,7 @@ with st.sidebar:
     st.header('プレイヤー名記入')
     players = st.text_area(
         "ここに参加者の名前を入力してください",
-        placeholder="プレイヤー1\nプレイヤー2\nプレイヤー3\n..."
+        placeholder="プレイヤー1\t\nプレイヤー2\t\nプレイヤー3\t\n..."
     )
     player_set = frozenset(players.split())
     st.write('プレイヤー名一覧')
