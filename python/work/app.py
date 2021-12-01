@@ -33,25 +33,38 @@ if clear_flag:
 # Create dead player list
 
 selected_player = st.selectbox("プレイヤーを１人選んでください", options=player_set)
-killed_flag = st.button("キル")
-if killed_flag:
-    st.session_state['dead'].append(selected_player)
+col1_kill, col2_kill = st.columns(2)
 
-undo_flag = st.button("キルから1人戻す")
+with col1_kill:
+    killed_flag = st.button("キル")
+    if killed_flag:
+        st.session_state['dead'].append(selected_player)
+
+with col2_kill:
+    undo_flag = st.button("キルから1人戻す")
 if undo_flag:
-    st.session_state['dead'].pop(-1)
+    if len(st.session_state['dead']) == 0:
+        st.error("キルされたプレイヤーがいないため実行できません")
+    else:
+        st.session_state['dead'].pop(-1)
 
 st.write(st.session_state['dead'])
 
 # Create ejected player list
 
-ejected_flag = st.button("追放")
-if ejected_flag:
-    st.session_state['ejected'].append(selected_player)
+col1_eject, col2_eject = st.columns(2)
+with col1_eject:
+    ejected_flag = st.button("追放")
+    if ejected_flag:
+        st.session_state['ejected'].append(selected_player)
 
-undo_ejected_flag = st.button("追放から1人戻す")
+with col2_eject:
+    undo_ejected_flag = st.button("追放から1人戻す")
 if undo_ejected_flag:
-    st.session_state['ejected'].pop(-1)
+    if len(st.session_state['ejected']) == 0:
+        st.error("追放されたプレイヤーがいないため実行できません")
+    else:
+        st.session_state['ejected'].pop(-1)
 
 st.write(st.session_state['ejected'])
 
