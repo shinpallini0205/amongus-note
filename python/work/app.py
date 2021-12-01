@@ -11,15 +11,15 @@ if 'ejected' not in st.session_state:
 st.title('Among usノート')
 
 # Create player list from text_area.
-
-st.header('プレイヤー名記入')
-players = st.text_area(
-    "ここに参加者の名前を入力してください",
-    placeholder="プレイヤー1\nプレイヤー2\nプレイヤー3\n..."
-)
-player_set = frozenset(players.split())
-st.write('プレイヤー名一覧')
-st.write(player_set)
+with st.sidebar:
+    st.header('プレイヤー名記入')
+    players = st.text_area(
+        "ここに参加者の名前を入力してください",
+        placeholder="プレイヤー1\nプレイヤー2\nプレイヤー3\n..."
+    )
+    player_set = frozenset(players.split())
+    st.write('プレイヤー名一覧')
+    st.write(player_set)
 
 # Clear dead player list
 
@@ -35,7 +35,7 @@ selected_player = st.radio("プレイヤーを１人選んでください", opti
 col1_kill, col2_kill = st.columns(2)
 
 with col1_kill:
-    killed_flag = st.button("キル")
+    killed_flag = st.button("キルされた")
     if killed_flag:
         st.session_state['dead'].append(selected_player)
 
@@ -47,13 +47,15 @@ if undo_flag:
     else:
         st.session_state['dead'].pop(-1)
 
-st.write(st.session_state['dead'])
+with st.sidebar:
+    st.write("キルされたプレイヤー")
+    st.write(st.session_state['dead'])
 
 # Create ejected player list
 
 col1_eject, col2_eject = st.columns(2)
 with col1_eject:
-    ejected_flag = st.button("追放")
+    ejected_flag = st.button("追放された")
     if ejected_flag:
         st.session_state['ejected'].append(selected_player)
 
@@ -65,13 +67,17 @@ if undo_ejected_flag:
     else:
         st.session_state['ejected'].pop(-1)
 
-st.write(st.session_state['ejected'])
+with st.sidebar:
+    st.write("追放されたプレイヤー")
+    st.write(st.session_state['ejected'])
 
 # Create alive player list
 
 alives = [player for player in player_set if not player in (st.session_state['dead'] + st.session_state['ejected'])]
 
-st.write(alives)
+with st.sidebar:
+    st.write("生きているプレイヤー")
+    st.write(alives)
 
 # Infomation Expander
 
