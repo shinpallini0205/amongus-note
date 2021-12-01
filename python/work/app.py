@@ -1,55 +1,95 @@
 import streamlit as st
 
+# Set session_state dictonary.
+
 if 'dead' not in st.session_state:
     st.session_state['dead'] = []
 
-if 'alive' not in st.session_state:
-    st.session_state['alive'] = []
+if 'ejected' not in st.session_state:
+    st.session_state['ejected'] = []
 
-st.title('Among us Note')
+
+st.caption("Created by shinpallini0205")
+st.title('Among usノート')
 
 # Create player list from text_area.
-
-st.header('Player list')
-players = st.text_area(
-    "Please write player name.",
-    placeholder="Player_name1\nPlayer_name2\nPlayer_name3\n..."
-)
-player_list = players.split()
-st.write('Player list')
-st.write(player_list)
+with st.sidebar:
+    st.header('プレイヤー名記入')
+    players = st.text_area(
+        "ここに参加者の名前を入力してください",
+        placeholder="プレイヤー1\t\nプレイヤー2\t\nプレイヤー3\t\n..."
+    )
+    player_set = frozenset(players.split())
+    st.write('プレイヤー名一覧')
+    st.write(player_set)
 
 # Clear dead player list
 
-clear_flag = st.button("Clear")
+clear_flag = st.button("キル・追放情報をリセット")
 if clear_flag:
     st.session_state['dead'] = []
-    st.session_state['alive'] = []
+    st.session_state['ejected'] = []
 
+selected_player = st.radio("プレイヤーを１人選んでください", options=player_set)
 
 # Create dead player list
 
-killed = st.selectbox("Select killed player...", options=player_list)
-append_flag = st.button("Add killed player")
-if append_flag:
-    st.session_state['dead'].append(killed)
+col1_kill, col2_kill = st.columns(2)
 
-undo_flag = st.button("Undo killed player")
+with col1_kill:
+    killed_flag = st.button("キルされた")
+    if killed_flag:
+        st.session_state['dead'].append(selected_player)
+
+with col2_kill:
+    undo_flag = st.button("キルから1人戻す")
 if undo_flag:
-    st.session_state['dead'].pop(-1)
+    if len(st.session_state['dead']) == 0:
+        st.error("キルされたプレイヤーがいないため実行できません")
+    else:
+        st.session_state['dead'].pop(-1)
 
-st.write(st.session_state['dead'])
+with st.sidebar:
+    st.write("キルされたプレイヤー")
+    st.write(st.session_state['dead'])
+
+# Create ejected player list
+
+col1_eject, col2_eject = st.columns(2)
+with col1_eject:
+    ejected_flag = st.button("追放された")
+    if ejected_flag:
+        st.session_state['ejected'].append(selected_player)
+
+with col2_eject:
+    undo_ejected_flag = st.button("追放から1人戻す")
+if undo_ejected_flag:
+    if len(st.session_state['ejected']) == 0:
+        st.error("追放されたプレイヤーがいないため実行できません")
+    else:
+        st.session_state['ejected'].pop(-1)
+
+with st.sidebar:
+    st.write("追放されたプレイヤー")
+    st.write(st.session_state['ejected'])
 
 # Create alive player list
 
-st.session_state['alive'] = [player for player in player_list if not player in st.session_state['dead']]
-st.write(st.session_state['alive'])
+alives = [player for player in player_set if not player in (st.session_state['dead'] + st.session_state['ejected'])]
 
-# Expander test
+with st.sidebar:
+    st.write("生きているプレイヤー")
+    st.write(alives)
+
+# Infomation Expander
+
+st.header("キル情報整理スペース")
 
 for killed_player in st.session_state['dead']:
     with st.expander(killed_player):
-        for alive_player in st.session_state['alive']:
+        for alive_player in alives:
             st.select_slider(
-                f"Possibility that {alive_player} killed {killed_player}",
-                options=['Innocent', 'A little innocent', 'Neither', 'A little suspicious','Suspicious'])
+                f"{alive_player}が{killed_player}の犯行に関われる可能性",
+                options=['確白', '少し白い', '不明', '少し怪しい','容疑者'],
+                value='不明'
+            )
