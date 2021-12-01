@@ -6,6 +6,9 @@ if 'dead' not in st.session_state:
 if 'alive' not in st.session_state:
     st.session_state['alive'] = []
 
+if 'ejected' not in st.session_state:
+    st.session_state['ejected'] = []
+
 st.title('Among usノート')
 
 # Create player list from text_area.
@@ -15,9 +18,9 @@ players = st.text_area(
     "ここに参加者の名前を入力してください",
     placeholder="プレイヤー1\nプレイヤー2\nプレイヤー3\n..."
 )
-player_list = players.split()
-st.write('プレイヤーリスト')
-st.write(player_list)
+player_set = frozenset(players.split())
+st.write('プレイヤー名一覧')
+st.write(player_set)
 
 # Clear dead player list
 
@@ -29,7 +32,7 @@ if clear_flag:
 
 # Create dead player list
 
-killed = st.selectbox("今回キルされたのは...", options=player_list)
+killed = st.selectbox("今回キルされたのは...", options=player_set)
 append_flag = st.button("送信")
 if append_flag:
     st.session_state['dead'].append(killed)
@@ -42,7 +45,7 @@ st.write(st.session_state['dead'])
 
 # Create alive player list
 
-st.session_state['alive'] = [player for player in player_list if not player in st.session_state['dead']]
+st.session_state['alive'] = [player for player in player_set if not player in st.session_state['dead']]
 st.write(st.session_state['alive'])
 
 # Expander test
