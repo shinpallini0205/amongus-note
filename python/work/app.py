@@ -38,8 +38,25 @@ col1_kill, col2_kill = st.columns(2)
 
 with col1_kill:
     killed_flag = st.button("キルされた")
-    if killed_flag:
-        st.session_state['dead'].append(selected_player)
+
+def player_validation(selected_player: str, key: str):
+    """キル、追放されたプレイヤーを適切に登録するための検証を実行
+    args:
+        selected_player:ラジオボタンで選んだプレイヤー
+        key:'dead'または'ejected'でどのセッション変数に保存するか指定
+    
+    example:
+        player_validation(selected_player, 'dead')
+    """
+    if selected_player in st.session_state['dead']:
+        return st.error("すでにキルされたリストにいるため追加できません")
+    elif selected_player in st.session_state['ejected']:
+        return st.error("すでに追放されたリストにいるため追加できません")
+    else:
+        st.session_state[key].append(selected_player)
+
+if killed_flag:
+    player_validation(selected_player, 'dead')
 
 with col2_kill:
     undo_flag = st.button("キルから1人戻す")
@@ -58,8 +75,8 @@ with st.sidebar:
 col1_eject, col2_eject = st.columns(2)
 with col1_eject:
     ejected_flag = st.button("追放された")
-    if ejected_flag:
-        st.session_state['ejected'].append(selected_player)
+if ejected_flag:
+    player_validation(selected_player, 'ejected')
 
 with col2_eject:
     undo_ejected_flag = st.button("追放から1人戻す")
