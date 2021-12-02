@@ -103,7 +103,7 @@ with st.sidebar:
 st.header("キル情報整理スペース")
 
 for killed_player in st.session_state['dead']:
-    with st.expander(killed_player):
+    with st.expander(f"{killed_player}キルについて"):
         for alive_player in alives:
             st.select_slider(
                 f"{alive_player}が{killed_player}の犯行に関われる可能性",
