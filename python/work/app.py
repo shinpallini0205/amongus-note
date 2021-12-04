@@ -20,9 +20,10 @@ with st.sidebar:
         placeholder="プレイヤー1\t\nプレイヤー2\t\nプレイヤー3\t\n..."
     )
     player_set = frozenset(players.split())
+    player_sorted = sorted(list(player_set))
     st.write('プレイヤー名一覧')
-    st.write(player_set)
-    st.write(f"登録人数: {len(player_set)}名")
+    st.write(player_sorted)
+    st.write(f"登録人数: {len(player_sorted)}名")
 
     st.markdown("---")
 
@@ -33,7 +34,7 @@ if clear_flag:
     st.session_state['dead'] = []
     st.session_state['ejected'] = []
 
-selected_player = st.radio("プレイヤーを１人選んでください", options=player_set)
+selected_player = st.radio("プレイヤーを１人選んでください", options=player_sorted)
 
 # Create dead player list
 
@@ -51,12 +52,17 @@ def player_validation(selected_player: str, key: str):
     example:
         player_validation(selected_player, 'dead')
     """
+    success_messages = {
+        'dead': f'{selected_player}をキルされたリストに追加しました',
+        'ejected': f'{selected_player}を追放されたリストに追加しました'
+    }
     if selected_player in st.session_state['dead']:
-        return st.error("すでにキルされたリストにいるため追加できません")
+        return st.error(f"{selected_player}はすでにキルされたリストにいるため追加できません")
     elif selected_player in st.session_state['ejected']:
-        return st.error("すでに追放されたリストにいるため追加できません")
+        return st.error(f"{selected_player}はすでに追放されたリストにいるため追加できません")
     else:
         st.session_state[key].append(selected_player)
+        st.success(success_messages[key])
 
 if killed_flag:
     player_validation(selected_player, 'dead')
@@ -95,7 +101,7 @@ with st.sidebar:
 
 # Create alive player list
 
-alives = [player for player in player_set if not player in (st.session_state['dead'] + st.session_state['ejected'])]
+alives = [player for player in player_sorted if not player in (st.session_state['dead'] + st.session_state['ejected'])]
 
 with st.sidebar:
     st.write("生きているプレイヤー")
