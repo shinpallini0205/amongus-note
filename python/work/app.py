@@ -24,6 +24,8 @@ with st.sidebar:
     st.write(player_set)
     st.write(f"登録人数: {len(player_set)}名")
 
+    st.markdown("---")
+
 # Clear dead player list
 
 clear_flag = st.button("キル・追放情報をリセット")
@@ -100,6 +102,8 @@ with st.sidebar:
     st.write(alives)
 
 # Infomation Expander
+
+st.markdown("---")
 
 st.header("キル情報整理スペース")
 
