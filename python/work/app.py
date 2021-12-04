@@ -33,6 +33,7 @@ clear_flag = st.button("キル・追放情報をリセット")
 if clear_flag:
     st.session_state['dead'] = []
     st.session_state['ejected'] = []
+    st.success('キル・追放情報をリセットしました')
 
 selected_player = st.radio("プレイヤーを１人選んでください", options=player_sorted)
 
