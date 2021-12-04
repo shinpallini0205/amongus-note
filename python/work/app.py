@@ -22,6 +22,7 @@ with st.sidebar:
     player_set = frozenset(players.split())
     st.write('プレイヤー名一覧')
     st.write(player_set)
+    st.write(f"登録人数: {len(player_set)}名")
 
 # Clear dead player list
 
