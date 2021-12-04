@@ -64,36 +64,44 @@ def player_validation(selected_player: str, key: str):
         st.session_state[key].append(selected_player)
         st.success(success_messages[key])
 
-if killed_flag:
-    player_validation(selected_player, 'dead')
-
 with col2_kill:
     undo_flag = st.button("キルから1人戻す")
-if undo_flag:
-    if len(st.session_state['dead']) == 0:
-        st.error("キルされたプレイヤーがいないため実行できません")
-    else:
-        st.session_state['dead'].pop(-1)
-
-with st.sidebar:
-    st.write("キルされたプレイヤー")
-    st.write(st.session_state['dead'])
 
 # Create ejected player list
 
 col1_eject, col2_eject = st.columns(2)
 with col1_eject:
     ejected_flag = st.button("追放された")
-if ejected_flag:
-    player_validation(selected_player, 'ejected')
 
 with col2_eject:
     undo_ejected_flag = st.button("追放から1人戻す")
+
+# Check button flags
+
+if killed_flag:
+    player_validation(selected_player, 'dead')
+
+if undo_flag:
+    if len(st.session_state['dead']) == 0:
+        st.error("キルされたプレイヤーがいないため実行できません")
+    else:
+        poped = st.session_state['dead'].pop(-1)
+        st.success(f"{poped}をキルされたリストから戻しました")
+
+if ejected_flag:
+    player_validation(selected_player, 'ejected')
+
 if undo_ejected_flag:
     if len(st.session_state['ejected']) == 0:
         st.error("追放されたプレイヤーがいないため実行できません")
     else:
-        st.session_state['ejected'].pop(-1)
+        poped = st.session_state['ejected'].pop(-1)
+        st.success(f"{poped}を追放されたリストから戻しました")
+
+# Update player status(dead, ejected)
+with st.sidebar:
+    st.write("キルされたプレイヤー")
+    st.write(st.session_state['dead'])
 
 with st.sidebar:
     st.write("追放されたプレイヤー")
