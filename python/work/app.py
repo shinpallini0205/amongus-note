@@ -122,7 +122,8 @@ st.markdown("---")
 
 st.header("キル情報整理スペース")
 
-for killed_player in st.session_state['dead']:
+for index, killed_player in enumerate(st.session_state['dead']):
+    st.markdown(f'**{index+1}キル目**')
     with st.expander(f"{killed_player}キルについて"):
         col1_deduce, _, col2_deduce = st.columns([5,1,5])
         for index, alive_player in enumerate(alives):
