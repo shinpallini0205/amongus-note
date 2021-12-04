@@ -124,9 +124,19 @@ st.header("キル情報整理スペース")
 
 for killed_player in st.session_state['dead']:
     with st.expander(f"{killed_player}キルについて"):
-        for alive_player in alives:
-            st.select_slider(
-                f"{alive_player}が{killed_player}の犯行に関われる可能性",
-                options=['確白', '少し白い', '不明', '少し怪しい','容疑者'],
-                value='不明'
-            )
+        col1_deduce, _, col2_deduce = st.columns([5,1,5])
+        for index, alive_player in enumerate(alives):
+            if index % 2 == 0:
+                with col1_deduce:
+                    st.select_slider(
+                    f"{alive_player}が{killed_player}の犯行に関われる可能性",
+                    options=['確白', '少し白い', '不明', '少し怪しい','容疑者'],
+                    value='不明'
+                    )
+            else:
+                with col2_deduce:
+                    st.select_slider(
+                    f"{alive_player}が{killed_player}の犯行に関われる可能性",
+                    options=['確白', '少し白い', '不明', '少し怪しい','容疑者'],
+                    value='不明'
+                    )
