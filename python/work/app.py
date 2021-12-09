@@ -118,18 +118,25 @@ st.markdown("---")
 
 st.header("キル情報整理スペース")
 
+pos_list = ['ミーティング', '昇降機', '宿舎前', \
+        '金庫室', 'エンジンルーム', 'コミュニケーション', \
+        'コックピット', '武器庫', 'キッチン', '展望デッキ(キッチン)', \
+        'セキュリティ', '展望デッキ(セキュリティ)', 'エレクトリカル', \
+        'バイタル', '貨物室', 'ラウンジ', 'アーカイブ']
+
 for index, killed_player in enumerate(st.session_state['dead']):
     st.markdown(f'**{index+1}キル目**')
     with st.expander(f"{killed_player}キルについて"):
         col1_deduce, _, col2_deduce = st.columns([5,1,5])
-        for index, alive_player in enumerate(alives):
-            if index % 2 == 0:
+        for _index, alive_player in enumerate(alives):
+            if _index % 2 == 0:
                 with col1_deduce:
                     st.select_slider(
                     f"{alive_player}が{killed_player}の犯行に関われる可能性",
                     options=['確白', '少し白い', '不明', '少し怪しい','容疑者'],
                     value='不明'
                     )
+                    st.selectbox(f'{alive_player}の位置({index+1})', options=pos_list)
             else:
                 with col2_deduce:
                     st.select_slider(
@@ -137,3 +144,4 @@ for index, killed_player in enumerate(st.session_state['dead']):
                     options=['確白', '少し白い', '不明', '少し怪しい','容疑者'],
                     value='不明'
                     )
+                    st.selectbox(f'{alive_player}の位置({index+1})', options=pos_list)
