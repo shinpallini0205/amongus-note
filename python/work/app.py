@@ -33,7 +33,6 @@ clear_flag = st.button("キル・追放情報をリセット")
 if clear_flag:
     st.session_state['dead'] = []
     st.session_state['ejected'] = []
-    st.success('キル・追放情報をリセットしました')
 
 selected_player = st.radio("プレイヤーを１人選んでください", options=player_sorted)
 
@@ -63,7 +62,6 @@ def player_validation(selected_player: str, key: str):
         return st.error(f"{selected_player}はすでに追放されたリストにいるため追加できません")
     else:
         st.session_state[key].append(selected_player)
-        st.success(success_messages[key])
 
 with col2_kill:
     undo_flag = st.button("キルから1人戻す")
@@ -87,7 +85,6 @@ if undo_flag:
         st.error("キルされたプレイヤーがいないため実行できません")
     else:
         poped = st.session_state['dead'].pop(-1)
-        st.success(f"{poped}をキルされたリストから戻しました")
 
 if ejected_flag:
     player_validation(selected_player, 'ejected')
@@ -97,7 +94,6 @@ if undo_ejected_flag:
         st.error("追放されたプレイヤーがいないため実行できません")
     else:
         poped = st.session_state['ejected'].pop(-1)
-        st.success(f"{poped}を追放されたリストから戻しました")
 
 # Update player status(dead, ejected)
 with st.sidebar:
